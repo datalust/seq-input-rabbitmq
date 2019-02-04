@@ -22,28 +22,27 @@ namespace Seq.Input.RabbitMQ
         [SeqAppSetting(
             DisplayName = "RabbitMQ port",
             IsOptional = true,
-            HelpText = "The port on which the RabbitMQ server is listening. The default is `5762`.")]
-        public int RabbitMQPort { get; set; } = 5762;
+            HelpText = "The port on which the RabbitMQ server is listening. The default is `5672`.")]
+        public int RabbitMQPort { get; set; } = 5672;
 
         [SeqAppSetting(
             DisplayName = "RabbitMQ user",
             IsOptional = true,
-            HelpText = "The username provided when connecting to RabbitMQ. The default is to connect" +
-                       "anonymously.")]
-        public string RabbitMQUser { get; set; }
+            HelpText = "The username provided when connecting to RabbitMQ. The default is `guest`.")]
+        public string RabbitMQUser { get; set; } = "guest";
 
         [SeqAppSetting(
             DisplayName = "RabbitMQ password",
             IsOptional = true,
             InputType = SettingInputType.Password,
-            HelpText = "The password provided when connecting to RabbitMQ. The default is no password.")]
-        public string RabbitMQPassword { get; set; }
+            HelpText = "The password provided when connecting to RabbitMQ. The default is `guest`.")]
+        public string RabbitMQPassword { get; set; } = "guest";
 
         [SeqAppSetting(
             DisplayName = "RabbitMQ queue",
             IsOptional = true,
             HelpText = "The RabbitMQ queue name to receive events from. The default is `Logs`.")]
-        public string RabbitMQQueue { get; set; } = "Logs";
+        public string RabbitMQQueue { get; set; } = "logs";
 
         [SeqAppSetting(
             DisplayName = "Durable",
@@ -90,7 +89,7 @@ namespace Seq.Input.RabbitMQ
 
             _listener = new RabbitMQListener(
                 Receive,
-                RabbitMQHost ?? "localhost",
+                RabbitMQHost,
                 RabbitMQPort,
                 RabbitMQUser,
                 RabbitMQPassword,
@@ -108,7 +107,7 @@ namespace Seq.Input.RabbitMQ
 
         public void Dispose()
         {
-            _listener.Dispose();
+            _listener?.Dispose();
         }
     }
 }

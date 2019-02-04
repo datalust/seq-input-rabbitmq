@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using Serilog;
 using Serilog.Formatting.Compact;
 using Serilog.Sinks.RabbitMQ.Sinks.RabbitMQ;
@@ -11,7 +12,11 @@ namespace Demo
         {
             var rmq = new RabbitMQConfiguration
             {
-                Hostname = "localhost"
+                Hostname = "localhost",
+                Username = "guest",
+                Password = "guest",
+                Exchange = "",
+                RouteKey = "logs"
             };
 
             Log.Logger = new LoggerConfiguration()
@@ -22,6 +27,7 @@ namespace Demo
             while (true)
             {
                 Log.Information("Yo, RabbitMQ!");
+                Thread.Sleep(1000);
             }
         }
     }

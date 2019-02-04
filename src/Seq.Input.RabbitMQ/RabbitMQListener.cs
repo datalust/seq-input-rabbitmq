@@ -21,7 +21,8 @@ namespace Seq.Input.RabbitMQ
             bool isQueueExclusive,
             bool isReceiveAutoAck)
         {
-            var factory = new ConnectionFactory {
+            var factory = new ConnectionFactory
+            {
                 HostName = rabbitMQHost,
                 Port = rabbitMQPort,
                 UserName = rabbitMQUser,
@@ -50,8 +51,8 @@ namespace Seq.Input.RabbitMQ
 
         public void Dispose()
         {
-            _channel.Dispose();
-            _connection.Close();
+            _channel?.Dispose();
+            _connection?.Close();
         }
     }
 }
