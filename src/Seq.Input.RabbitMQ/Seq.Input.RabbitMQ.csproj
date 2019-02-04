@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <VersionPrefix>1.0.0</VersionPrefix>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Seq.Apps" Version="5.1.0-*" />
+    <PackageReference Include="RabbitMQ.Client" Version="5.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="./obj/publish/**/*" Exclude="./obj/publish/Seq.Input.RabbitMQ.dll" Pack="true" PackagePath="lib/$(TargetFramework)" />
+  </ItemGroup>
+  
+</Project>
