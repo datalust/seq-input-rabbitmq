@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="./obj/publish/**/*" Exclude="./obj/publish/Seq.Input.RabbitMQ.dll" Pack="true" PackagePath="lib/$(TargetFramework)" />
+    <None Include="./obj/publish/**/*" Exclude="./obj/publish/Seq.Input.RabbitMQ.dll;./obj/publish/Seq.Apps.dll;./obj/publish/Serilog.dll" Pack="true" PackagePath="lib/$(TargetFramework)" />
   </ItemGroup>
   
 </Project>
