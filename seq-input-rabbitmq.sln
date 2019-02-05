@@ -6,6 +6,8 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "sln", "sln", "{7D1D14F7-D40D-43EB-8CC0-04B555758178}"
 	ProjectSection(SolutionItems) = preProject
 		Build.ps1 = Build.ps1
+		LICENSE = LICENSE
+		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{704915B0-6D95-4CF8-ACC2-5ED939A2913C}"
