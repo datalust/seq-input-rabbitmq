@@ -1,3 +1,3 @@
-# Seq.Input.RabbitMQ
+# Seq.Input.RabbitMQ [![Build status](https://ci.appveyor.com/api/projects/status/uq432micob0lpiu4?svg=true)](https://ci.appveyor.com/project/datalust/seq-input-rabbitmq)
 
 A Seq custom input that pulls events from RabbitMQ.
