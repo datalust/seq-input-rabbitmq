@@ -11,7 +11,8 @@ namespace Seq.Input.RabbitMQ
 
         public RabbitMQListener(
             Action<byte[]> receive,
-            string rabbitMQHost, 
+            string rabbitMQHost,
+            string rabbitMQVHost,
             int rabbitMQPort, 
             string rabbitMQUser, 
             string rabbitMQPassword,
@@ -24,6 +25,7 @@ namespace Seq.Input.RabbitMQ
             var factory = new ConnectionFactory
             {
                 HostName = rabbitMQHost,
+                VirtualHost = rabbitMQVHost,
                 Port = rabbitMQPort,
                 UserName = rabbitMQUser,
                 Password = rabbitMQPassword
