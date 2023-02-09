@@ -20,6 +20,12 @@ namespace Seq.Input.RabbitMQ
         public string RabbitMQHost { get; set; } = "localhost";
 
         [SeqAppSetting(
+            DisplayName = "RabbitMQ vhost",
+            IsOptional = true,
+            HelpText = "The virtual host in RabbitMQ. The default is `/`.")]
+        public string RabbitMQVHost { get; set; } = "/";
+
+        [SeqAppSetting(
             DisplayName = "RabbitMQ port",
             IsOptional = true,
             HelpText = "The port on which the RabbitMQ server is listening. The default is `5672`.")]
@@ -90,6 +96,7 @@ namespace Seq.Input.RabbitMQ
             _listener = new RabbitMQListener(
                 Receive,
                 RabbitMQHost,
+                RabbitMQVHost,
                 RabbitMQPort,
                 RabbitMQUser,
                 RabbitMQPassword,
