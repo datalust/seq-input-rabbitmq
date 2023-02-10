@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Text;
 using Seq.Apps;
@@ -51,6 +51,12 @@ namespace Seq.Input.RabbitMQ
         public string RabbitMQQueue { get; set; } = "logs";
 
         [SeqAppSetting(
+            DisplayName = "Ssl",
+            IsOptional = true,
+            HelpText = "Whether or not the connection is with ssl. The default is false.")]
+        public bool IsSsl { get; set; }
+
+        [SeqAppSetting(
             DisplayName = "Durable",
             IsOptional = true,
             HelpText = "Whether or not the queue is durable. The default is false.")]
@@ -77,13 +83,13 @@ namespace Seq.Input.RabbitMQ
         public void Start(TextWriter inputWriter)
         {
             var sync = new object();
-            void Receive(byte[] body)
+            void Receive(ReadOnlyMemory<byte> body)
             {
                 try
                 {
                     lock (sync)
                     {
-                        var clef = Encoding.UTF8.GetString(body);
+                        var clef = body.ToString();
                         inputWriter.WriteLine(clef);
                     }
                 }
@@ -101,6 +107,7 @@ namespace Seq.Input.RabbitMQ
                 RabbitMQUser,
                 RabbitMQPassword,
                 RabbitMQQueue,
+                IsSsl,
                 IsQueueDurable,
                 IsQueueAutoDelete,
                 IsQueueExclusive,
