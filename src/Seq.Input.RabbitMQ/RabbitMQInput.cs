@@ -89,7 +89,7 @@ namespace Seq.Input.RabbitMQ
                 {
                     lock (sync)
                     {
-                        var clef = body.ToString();
+                        var clef = Encoding.UTF8.GetString(body.ToArray());
                         inputWriter.WriteLine(clef);
                     }
                 }
