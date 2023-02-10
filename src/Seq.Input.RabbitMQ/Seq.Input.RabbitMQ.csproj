@@ -14,7 +14,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Seq.Apps" Version="5.1.0-*" />
+    <PackageReference Include="Seq.Apps" Version="2021.4.0" />
     <PackageReference Include="RabbitMQ.Client" Version="6.4.0" />
   </ItemGroup>
 
