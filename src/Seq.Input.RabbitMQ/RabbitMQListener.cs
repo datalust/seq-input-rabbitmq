@@ -1,22 +1,24 @@
-﻿using System;
+using System;
+using System.Net.Security;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 
 namespace Seq.Input.RabbitMQ
 {
-    class RabbitMQListener : IDisposable
+    public class RabbitMQListener : IDisposable
     {
         readonly IConnection _connection;
         readonly IModel _channel;
 
         public RabbitMQListener(
-            Action<byte[]> receive,
+            Action<ReadOnlyMemory<byte>> receive,
             string rabbitMQHost,
             string rabbitMQVHost,
             int rabbitMQPort, 
             string rabbitMQUser, 
             string rabbitMQPassword,
             string rabbitMQQueue, 
+            bool IsSsl,
             bool isQueueDurable, 
             bool isQueueAutoDelete, 
             bool isQueueExclusive,
@@ -30,7 +32,15 @@ namespace Seq.Input.RabbitMQ
                 UserName = rabbitMQUser,
                 Password = rabbitMQPassword
             };
-
+            if (IsSsl)
+            {
+                factory.Ssl.AcceptablePolicyErrors = 
+                    SslPolicyErrors.RemoteCertificateNameMismatch |
+                    SslPolicyErrors.RemoteCertificateChainErrors |
+                    SslPolicyErrors.RemoteCertificateNotAvailable;
+                factory.Ssl.Enabled = true;
+            }
+            
             _connection = factory.CreateConnection();
             _channel = _connection.CreateModel();
 
