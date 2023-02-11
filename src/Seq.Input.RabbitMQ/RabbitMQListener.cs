@@ -5,7 +5,7 @@ using RabbitMQ.Client.Events;
 
 namespace Seq.Input.RabbitMQ
 {
-    public class RabbitMQListener : IDisposable
+    class RabbitMQListener : IDisposable
     {
         readonly IConnection _connection;
         readonly IModel _channel;
@@ -34,6 +34,7 @@ namespace Seq.Input.RabbitMQ
             };
             if (IsSsl)
             {
+                // bad practice! but this is needed for now
                 factory.Ssl.AcceptablePolicyErrors = 
                     SslPolicyErrors.RemoteCertificateNameMismatch |
                     SslPolicyErrors.RemoteCertificateChainErrors |
