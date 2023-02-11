@@ -20,7 +20,7 @@ namespace Seq.Input.RabbitMQ
         public string RabbitMQHost { get; set; } = "localhost";
 
         [SeqAppSetting(
-            DisplayName = "RabbitMQ vhost",
+            DisplayName = "RabbitMQ Virtual Host",
             IsOptional = true,
             HelpText = "The virtual host in RabbitMQ. The default is `/`.")]
         public string RabbitMQVHost { get; set; } = "/";
@@ -51,9 +51,9 @@ namespace Seq.Input.RabbitMQ
         public string RabbitMQQueue { get; set; } = "logs";
 
         [SeqAppSetting(
-            DisplayName = "Ssl",
+            DisplayName = "Require SSL",
             IsOptional = true,
-            HelpText = "Whether or not the connection is with ssl. The default is false.")]
+            HelpText = "Whether or not the connection is with SSL. The default is false.")]
         public bool IsSsl { get; set; }
 
         [SeqAppSetting(
