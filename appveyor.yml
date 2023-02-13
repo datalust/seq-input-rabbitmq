@@ -1,7 +1,6 @@
 version: '{build}'
 skip_tags: true
-image: Visual Studio 2017
-configuration: Release
+image: Visual Studio 2022
 install:
 build_script:
 - ps: ./Build.ps1
@@ -11,14 +10,14 @@ artifacts:
 deploy:
 - provider: NuGet
   api_key:
-    secure: 1aikaDXBKMKvsGQrmweRt4UI2EjEkdmE+8HpDZyWvlVyt+rwBH4QS3XOw7rf2QUQ
+    secure: HDcRadKRDne9Gd1vEQwZknRQz63ZbZMJh6e4sFmiXCpjkxC5WCoQ0ZecWBHtVulX
   skip_symbols: true
   on:
-    branch: /^(master|dev)$/
+    branch: /^(main|dev)$/
 - provider: GitHub
   auth_token:
     secure: hX+cZmW+9BCXy7vyH8myWsYdtQHyzzil9K5yvjJv7dK9XmyrGYYDj/DPzMqsXSjo
   artifact: /Seq.Input.RabbitMQ.*\.nupkg/
   tag: v$(appveyor_build_version)
   on:
-    branch: master
+    branch: main
