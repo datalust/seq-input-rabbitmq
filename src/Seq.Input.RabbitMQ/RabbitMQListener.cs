@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using System.Net.Security;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 
@@ -10,12 +11,14 @@ namespace Seq.Input.RabbitMQ
         readonly IModel _channel;
 
         public RabbitMQListener(
-            Action<byte[]> receive,
-            string rabbitMQHost, 
+            Action<ReadOnlyMemory<byte>> receive,
+            string rabbitMQHost,
+            string rabbitMQVHost,
             int rabbitMQPort, 
             string rabbitMQUser, 
             string rabbitMQPassword,
             string rabbitMQQueue, 
+            bool isSsl,
             bool isQueueDurable, 
             bool isQueueAutoDelete, 
             bool isQueueExclusive,
@@ -24,11 +27,16 @@ namespace Seq.Input.RabbitMQ
             var factory = new ConnectionFactory
             {
                 HostName = rabbitMQHost,
+                VirtualHost = rabbitMQVHost,
                 Port = rabbitMQPort,
                 UserName = rabbitMQUser,
-                Password = rabbitMQPassword
+                Password = rabbitMQPassword,
+                Ssl =
+                {
+                    Enabled = isSsl
+                }
             };
-
+            
             _connection = factory.CreateConnection();
             _channel = _connection.CreateModel();
 

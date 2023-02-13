@@ -5,7 +5,6 @@
     <Description>Ingest events into Seq directly from RabbitMQ</Description>
     <Authors>Datalust and Contributors</Authors>
     <PackageTags>seq-app</PackageTags>
-    <PackageIconUrl>https://raw.githubusercontent.com/datalust/sqelf/master/asset/seq-input-gelf.png</PackageIconUrl>
     <PackageProjectUrl>https://github.com/datalust/seq-input-rabbitmq</PackageProjectUrl>
     <RepositoryUrl>https://github.com/datalust/seq-input-rabbitmq</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
@@ -15,12 +14,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Seq.Apps" Version="5.1.0-*" />
-    <PackageReference Include="RabbitMQ.Client" Version="5.1.0" />
+    <PackageReference Include="Seq.Apps" Version="2021.4.0" />
+    <PackageReference Include="RabbitMQ.Client" Version="6.4.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="../../LICENSE" Pack="true" PackagePath=""/>
+    <None Include="../../LICENSE" Pack="true" PackagePath="" />
     <None Include="./obj/publish/**/*" Exclude="./obj/publish/Seq.Input.RabbitMQ.dll;./obj/publish/Seq.Apps.dll;./obj/publish/Serilog.dll" Pack="true" PackagePath="lib/$(TargetFramework)" />
   </ItemGroup>
   

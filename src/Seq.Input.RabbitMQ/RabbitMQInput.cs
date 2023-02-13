@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Text;
 using Seq.Apps;
@@ -18,6 +18,12 @@ namespace Seq.Input.RabbitMQ
             IsOptional = true,
             HelpText = "The hostname on which RabbitMQ is running. The default is `localhost`.")]
         public string RabbitMQHost { get; set; } = "localhost";
+
+        [SeqAppSetting(
+            DisplayName = "RabbitMQ Virtual Host",
+            IsOptional = true,
+            HelpText = "The virtual host in RabbitMQ. The default is `/`.")]
+        public string RabbitMQVHost { get; set; } = "/";
 
         [SeqAppSetting(
             DisplayName = "RabbitMQ port",
@@ -43,6 +49,12 @@ namespace Seq.Input.RabbitMQ
             IsOptional = true,
             HelpText = "The RabbitMQ queue name to receive events from. The default is `Logs`.")]
         public string RabbitMQQueue { get; set; } = "logs";
+
+        [SeqAppSetting(
+            DisplayName = "Require SSL",
+            IsOptional = true,
+            HelpText = "Whether or not the connection is with SSL. The default is false.")]
+        public bool IsSsl { get; set; }
 
         [SeqAppSetting(
             DisplayName = "Durable",
@@ -71,13 +83,13 @@ namespace Seq.Input.RabbitMQ
         public void Start(TextWriter inputWriter)
         {
             var sync = new object();
-            void Receive(byte[] body)
+            void Receive(ReadOnlyMemory<byte> body)
             {
                 try
                 {
                     lock (sync)
                     {
-                        var clef = Encoding.UTF8.GetString(body);
+                        var clef = Encoding.UTF8.GetString(body.ToArray());
                         inputWriter.WriteLine(clef);
                     }
                 }
@@ -90,10 +102,12 @@ namespace Seq.Input.RabbitMQ
             _listener = new RabbitMQListener(
                 Receive,
                 RabbitMQHost,
+                RabbitMQVHost,
                 RabbitMQPort,
                 RabbitMQUser,
                 RabbitMQPassword,
                 RabbitMQQueue,
+                IsSsl,
                 IsQueueDurable,
                 IsQueueAutoDelete,
                 IsQueueExclusive,
