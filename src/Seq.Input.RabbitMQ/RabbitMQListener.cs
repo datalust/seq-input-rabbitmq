@@ -18,7 +18,7 @@ namespace Seq.Input.RabbitMQ
             string rabbitMQUser, 
             string rabbitMQPassword,
             string rabbitMQQueue, 
-            bool IsSsl,
+            bool isSsl,
             bool isQueueDurable, 
             bool isQueueAutoDelete, 
             bool isQueueExclusive,
@@ -30,17 +30,12 @@ namespace Seq.Input.RabbitMQ
                 VirtualHost = rabbitMQVHost,
                 Port = rabbitMQPort,
                 UserName = rabbitMQUser,
-                Password = rabbitMQPassword
+                Password = rabbitMQPassword,
+                Ssl =
+                {
+                    Enabled = isSsl
+                }
             };
-            if (IsSsl)
-            {
-                // bad practice! but this is needed for now
-                factory.Ssl.AcceptablePolicyErrors = 
-                    SslPolicyErrors.RemoteCertificateNameMismatch |
-                    SslPolicyErrors.RemoteCertificateChainErrors |
-                    SslPolicyErrors.RemoteCertificateNotAvailable;
-                factory.Ssl.Enabled = true;
-            }
             
             _connection = factory.CreateConnection();
             _channel = _connection.CreateModel();
