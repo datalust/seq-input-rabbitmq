@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Text;
+using RabbitMQ.Client;
 using Seq.Apps;
 
 namespace Seq.Input.RabbitMQ
@@ -51,6 +52,27 @@ namespace Seq.Input.RabbitMQ
         public string RabbitMQQueue { get; set; } = "logs";
 
         [SeqAppSetting(
+            DisplayName = "RabbitMQ exchange name",
+            IsOptional = true,
+            HelpText = "The name of the RabbitMQ exchange from which to pull events. This is the exchange " +
+                       "where the messages are published.")]
+        public string rabbitMQExchangeName { get; set; } = "";
+
+        [SeqAppSetting(
+            DisplayName = "RabbitMQ exchange type",
+            IsOptional = true,
+            HelpText = "The type of the RabbitMQ exchange (e.g., direct, topic, fanout, or headers). " +
+                       "Determines how messages are routed to the queue.")]
+        public string rabbitMQExchangeType { get; set; } = ExchangeType.Direct;
+
+        [SeqAppSetting(
+            DisplayName = "RabbitMQ Route key",
+            IsOptional = true,
+            HelpText = "The routing key used for binding the queue to the exchange. " +
+                       "This key is used to route messages from the exchange to the queue.")]
+        public string rabbitMQRouteKey { get; set; } = "";
+
+        [SeqAppSetting(
             DisplayName = "Require SSL",
             IsOptional = true,
             HelpText = "Whether or not the connection is with SSL. The default is false.")]
@@ -83,6 +105,7 @@ namespace Seq.Input.RabbitMQ
         public void Start(TextWriter inputWriter)
         {
             var sync = new object();
+
             void Receive(ReadOnlyMemory<byte> body)
             {
                 try
@@ -107,6 +130,9 @@ namespace Seq.Input.RabbitMQ
                 RabbitMQUser,
                 RabbitMQPassword,
                 RabbitMQQueue,
+                rabbitMQExchangeName,
+                rabbitMQExchangeType,
+                rabbitMQRouteKey,
                 IsSsl,
                 IsQueueDurable,
                 IsQueueAutoDelete,

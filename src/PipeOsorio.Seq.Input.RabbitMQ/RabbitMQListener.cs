@@ -1,5 +1,4 @@
 using System;
-using System.Net.Security;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 
@@ -14,13 +13,16 @@ namespace Seq.Input.RabbitMQ
             Action<ReadOnlyMemory<byte>> receive,
             string rabbitMQHost,
             string rabbitMQVHost,
-            int rabbitMQPort, 
-            string rabbitMQUser, 
+            int rabbitMQPort,
+            string rabbitMQUser,
             string rabbitMQPassword,
-            string rabbitMQQueue, 
+            string rabbitMQQueue,
+            string rabbitMQExchangeName,
+            string rabbitMQExchangeType,
+            string rabbitMQRouteKey,
             bool isSsl,
-            bool isQueueDurable, 
-            bool isQueueAutoDelete, 
+            bool isQueueDurable,
+            bool isQueueAutoDelete,
             bool isQueueExclusive,
             bool isReceiveAutoAck)
         {
@@ -36,16 +38,31 @@ namespace Seq.Input.RabbitMQ
                     Enabled = isSsl
                 }
             };
-            
+
             _connection = factory.CreateConnection();
             _channel = _connection.CreateModel();
 
+            if (rabbitMQExchangeName != string.Empty)
+                _channel.ExchangeDeclare(
+                    exchange: rabbitMQExchangeName,
+                    type: rabbitMQExchangeType,
+                    durable: isQueueDurable,
+                    autoDelete: isQueueAutoDelete
+                );
+
             _channel.QueueDeclare(
-                rabbitMQQueue, 
-                durable: isQueueDurable, 
+                rabbitMQQueue,
+                durable: isQueueDurable,
                 exclusive: isQueueExclusive,
-                autoDelete: isQueueAutoDelete, 
+                autoDelete: isQueueAutoDelete,
                 arguments: null);
+
+            if (rabbitMQRouteKey != string.Empty)
+                _channel.QueueBind(
+                    queue: rabbitMQQueue,
+                    exchange: rabbitMQExchangeName,
+                    routingKey: rabbitMQRouteKey
+                );
 
             var consumer = new EventingBasicConsumer(_channel);
             consumer.Received += (model, ea) => receive(ea.Body);
