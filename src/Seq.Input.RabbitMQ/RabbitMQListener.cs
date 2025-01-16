@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Net.Security;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
@@ -10,19 +11,19 @@ namespace Seq.Input.RabbitMQ
         readonly IConnection _connection;
         readonly IModel _channel;
 
-        public RabbitMQListener(
-            Action<ReadOnlyMemory<byte>> receive,
+        public RabbitMQListener(Action<ReadOnlyMemory<byte>> receive,
             string rabbitMQHost,
             string rabbitMQVHost,
-            int rabbitMQPort, 
-            string rabbitMQUser, 
+            int rabbitMQPort,
+            string rabbitMQUser,
             string rabbitMQPassword,
-            string rabbitMQQueue, 
+            string rabbitMQQueue,
             bool isSsl,
-            bool isQueueDurable, 
-            bool isQueueAutoDelete, 
+            bool isQueueDurable,
+            bool isQueueAutoDelete,
             bool isQueueExclusive,
-            bool isReceiveAutoAck)
+            bool isReceiveAutoAck, 
+            string dlx)
         {
             var factory = new ConnectionFactory
             {
@@ -40,12 +41,16 @@ namespace Seq.Input.RabbitMQ
             _connection = factory.CreateConnection();
             _channel = _connection.CreateModel();
 
+            var arguments = string.IsNullOrWhiteSpace(dlx) 
+                ? null 
+                : new Dictionary<string, object> { {"x-dead-letter-exchange", dlx} };
+            
             _channel.QueueDeclare(
                 rabbitMQQueue, 
                 durable: isQueueDurable, 
                 exclusive: isQueueExclusive,
                 autoDelete: isQueueAutoDelete, 
-                arguments: null);
+                arguments: arguments);
 
             var consumer = new EventingBasicConsumer(_channel);
             consumer.Received += (model, ea) => receive(ea.Body);
