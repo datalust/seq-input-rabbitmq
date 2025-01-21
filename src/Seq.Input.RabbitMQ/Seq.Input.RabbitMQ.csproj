@@ -1,7 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <VersionPrefix>1.0.0</VersionPrefix>
     <Description>Ingest events into Seq directly from RabbitMQ</Description>
     <Authors>Datalust and Contributors</Authors>
     <PackageTags>seq-app</PackageTags>
