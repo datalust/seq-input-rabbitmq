@@ -83,7 +83,7 @@ namespace Seq.Input.RabbitMQ
         [SeqAppSetting(
             DisplayName = "Dead Letter Exchange",
             IsOptional = true,
-            HelpText = "Name of dead letter exchange associated with this queue.")]
+            HelpText = "The name of the dead letter exchange associated with this queue. If specified, the exchange will be used when declaring the queue, otherwise no dead lettering will be configured.")]
         public string Dlx { get; set; } = "guest";
 
         public void Start(TextWriter inputWriter)
