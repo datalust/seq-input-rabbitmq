@@ -80,6 +80,12 @@ namespace Seq.Input.RabbitMQ
             HelpText = "Whether or not messages should be auto-acknowledged. The default is true.")]
         public bool IsReceiveAutoAck { get; set; } = true;
 
+        [SeqAppSetting(
+            DisplayName = "Dead Letter Exchange",
+            IsOptional = true,
+            HelpText = "The name of the dead letter exchange associated with this queue. If specified, the exchange will be used when declaring the queue, otherwise no dead lettering will be configured.")]
+        public string Dlx { get; set; }
+
         public void Start(TextWriter inputWriter)
         {
             var sync = new object();
@@ -111,7 +117,8 @@ namespace Seq.Input.RabbitMQ
                 IsQueueDurable,
                 IsQueueAutoDelete,
                 IsQueueExclusive,
-                IsReceiveAutoAck);
+                IsReceiveAutoAck,
+                Dlx);
         }
 
         public void Stop()
