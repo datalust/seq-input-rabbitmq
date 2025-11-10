@@ -1,20 +1,18 @@
 ﻿using System.Threading;
 using Serilog;
 using Serilog.Formatting.Compact;
-using Serilog.Sinks.RabbitMQ.Sinks.RabbitMQ;
-
-var rmq = new RabbitMQConfiguration
-{
-    Hostname = "localhost",
-    Username = "guest",
-    Password = "guest",
-    Exchange = "",
-    RouteKey = "logs"
-};
 
 Log.Logger = new LoggerConfiguration()
     .Enrich.WithProperty("Application", "Demo")
-    .WriteTo.RabbitMQ(rmq, new CompactJsonFormatter())
+    .WriteTo.RabbitMQ((client, sink) =>
+    {
+        client.Hostnames.Add("localhost");
+        client.Username = "guest";
+        client.Password = "guest";
+        client.Exchange = "";
+        client.RoutingKey = "logs";
+        sink.TextFormatter = new CompactJsonFormatter();
+    })
     .CreateLogger();
 
 while (true)
