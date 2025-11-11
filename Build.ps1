@@ -28,18 +28,17 @@ try {
     Write-Output "build: Package version suffix is $suffix"
     Write-Output "build: Build version suffix is $buildSuffix"
 
-    & dotnet build -c Release --version-suffix=$buildSuffix /p:ContinuousIntegrationBuild=true
-    if($LASTEXITCODE -ne 0) { throw "Build failed" }
-
     foreach ($src in Get-ChildItem src/*) {
         Push-Location $src
 
         Write-Output "build: Packaging project in $src"
 
         if ($suffix) {
-            & dotnet pack -c Release --no-build --no-restore  -o ../../artifacts --version-suffix=$suffix
+            & dotnet publish -c Release -o ./obj/publish --version-suffix=$buildSuffix /p:ContinuousIntegrationBuild=true
+            & dotnet pack -c Release -o ../../artifacts --no-build --version-suffix=$suffix
         } else {
-            & dotnet pack -c Release --no-build --no-restore  -o ../../artifacts
+            & dotnet publish -c Release -o ./obj/publish  /p:ContinuousIntegrationBuild=true
+            & dotnet pack -c Release -o ../../artifacts --no-build
         }
         if($LASTEXITCODE -ne 0) { throw "Packaging failed" }
 
